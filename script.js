@@ -4,8 +4,9 @@
 //     selezione opzione 2 --> griglia piu grando 
 // 2- le varie selezioni fanno venire fuori una griglia diversa
 
-
-
+// dichiarazione punteggio e bombe 
+let punteggio=0;
+let gameOn =false;
 function generaGriglia() {
     // Leggi la selezione dell'utente
     let modalita = document.getElementById("modalita").value;
@@ -13,10 +14,15 @@ function generaGriglia() {
     // Trova il container
     let container = document.getElementById("container");
 
+    punteggio=0;
+    gameOn=true;
+
+    // pulisce la griglia prima di crearne una nuova 
+    container.innerHTML=" ";
+
     // Determina il numero massimo per la modalità selezionata
     let numeroMassimo;
 
-    
     if (modalita === "facile") {
         numeroMassimo = 100;
     } else if (modalita === "medio") {
@@ -38,8 +44,15 @@ function generaGriglia() {
 
     // genera casualmente le bombe 
     let newBombe = bombe(numeroMassimo);
-    // punteggio di partenza 
-    let punteggio = 0;
+ 
+    if(gameOn){
+        let quadrati = document.querySelectorAll(".square");
+        quadrati.forEach(quadrato => {
+            quadrato.addEventListener("click", function(){
+                gestisciClick(this, newBombe)
+            });
+        });
+    }
 
     let arrayBombe = bombe(numeroMassimo);
     // Genera quadratini con numeri da 1 al numero massimo
@@ -80,12 +93,43 @@ function bombe(numeroMassimo){
     }
     return arrayBombe;
 }
-// funzione del fine gioco mostra punteggio o hai perso 
-function gameEnd(vittoria, punteggio){
-    if(vittoria){
-        alert("hai vinto!! complimenti il tuo punteggio e di :"+ punteggio)
-    }else{
-        alert("hai perso mi dispiace il tuo punteggio e di :" + punteggio)
+
+
+function gestisciClick(quadrato, arrayBombe){
+    // controlla se il gioco e ancora in corso 
+// gameOn deve essere true.
+// la classe "bomba" non deve essere presente nel quadrato.
+// il dataset cliccato deve essere false (indicando che la cella non è stata cliccata in precedenza).
+    if(!gameOn || quadrato.classList.contains("bomba")||quadrato.dataset.cliccato){
+        return;
+    }
+    quadrato.dataset.cliccato =true;
+    if(arrayBombe.includes(parseInt(quadrato.textContent))){
+        // se e solo se e una bomba 
+        quadrato.className="square bomba"
+        gameOn =false;
+        gameEnd(false, punteggio);
+    }else {
+        // se e solo se non è una bomba 
+        // se non è una bomba
+         quadrato.style.backgroundColor = "lightblue";
+         punteggio++;
+            if (punteggio === numeroMassimo - arrayBombe.length) {
+                // Se non ci sono più bombe, hai vinto
+                // Imposta il flag del gioco come non attivo
+                gameOn = false;
+                gameEnd(true, punteggio);
+            }
+        }
+    wiewPunteggio(punteggio);
+ }
+
+
+// funzione per mostrare il punteggio in pagina 
+
+function wiewPunteggio(punteggio){
+    let punteggioDove= document.getElementById("punteggio");
+    if(punteggioDove){
+        punteggioDove.textContent= "punteggio: " + punteggio
     }
 }
-
