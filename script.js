@@ -8,13 +8,15 @@
 
 function generaGriglia() {
     // Leggi la selezione dell'utente
-    var modalita = document.getElementById("modalita").value;
+    let modalita = document.getElementById("modalita").value;
 
     // Trova il container
-    var container = document.getElementById("container");
+    let container = document.getElementById("container");
 
     // Determina il numero massimo per la modalità selezionata
-    var numeroMassimo;
+    let numeroMassimo;
+
+    
     if (modalita === "facile") {
         numeroMassimo = 100;
     } else if (modalita === "medio") {
@@ -38,29 +40,19 @@ function generaGriglia() {
     let newBombe = bombe(numeroMassimo);
     // punteggio di partenza 
     let punteggio = 0;
+
+    let arrayBombe = bombe(numeroMassimo);
     // Genera quadratini con numeri da 1 al numero massimo
     for (let i = 1; i <= numeroMassimo; i++) {
         let quadrato = document.createElement("div");
         quadrato.className = "square";
         quadrato.textContent = i;
-        container.appendChild(quadrato);
+        // container.appendChild(quadrato);
         // funzione per il click dei quadrati che stampa in console
        
             quadrato.addEventListener("click", function() {
-                if(arrayBombe.includes(parseInt(this.textContent))){
-                    // se e solo se e una bomba 
-                    this.className="square bomba"
-                    gameEnd(false, punteggio);
-                }else {
-                    // se e solo se non è una bomba 
-                    this.removeEventListener("click", arguments.callee);
-                    punteggio++;
-                    if(punteggio === numeroMassimo - arrayBombe.length){
-                        // vinci solo se tocchi tutte le caselle trenne le bombe 
-                        gameEnd(true, punteggio);
-                    }
-                }
-            })(quadrato);
+                gestisciClick(this, arrayBombe);
+            });
         
         container.appendChild(quadrato);
         
@@ -78,7 +70,7 @@ function generaGriglia() {
 }
 
 // funzione che crea gestisce le bombe e le posizione in un array 
-function bombe(){
+function bombe(numeroMassimo){
     let arrayBombe = [];
     while(arrayBombe.length<= 16){
         let casualBomba = Math.floor(Math.random()* numeroMassimo) +1;

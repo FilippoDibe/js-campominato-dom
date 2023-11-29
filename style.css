@@ -17,7 +17,7 @@ body{
     border:solid black 1px;
 }
 #container{
-    /* display: none; */
+    display: none; 
     width: 60%;
     margin: auto;
     text-align: center;
@@ -28,4 +28,7 @@ body{
     justify-content: center;
     margin-top: 50px;
     margin-bottom: 50px;
+}
+.bomba{
+    background-color: red;
 }
