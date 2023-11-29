@@ -128,8 +128,5 @@ function gestisciClick(quadrato, arrayBombe){
 // funzione per mostrare il punteggio in pagina 
 
 function wiewPunteggio(punteggio){
-    let punteggioDove= document.getElementById("punteggio");
-    if(punteggioDove){
-        punteggioDove.textContent= "punteggio: " + punteggio
-    }
+    let punteggioDove= document.getElementById("punteggio").innerHTML= "punteggio : "+ punteggio;
 }
