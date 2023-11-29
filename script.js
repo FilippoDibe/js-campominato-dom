@@ -60,11 +60,10 @@ function generaGriglia() {
                         gameEnd(true, punteggio);
                     }
                 }
-                console.log("Cella cliccata: " + this.textContent);
-            });
+            })(quadrato);
         
         container.appendChild(quadrato);
-
+        
         if (i % casellePerRiga === 0) {
             container.appendChild(document.createElement("br"));
         }
